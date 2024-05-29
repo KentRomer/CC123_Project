@@ -1,6 +1,8 @@
 package gui;
 import constant.commonconstant;
 import db.MyJDBC;
+import db.userDb;
+import doctors.DoctorTypeAppointment;
 /*import sa curve sa panel
  */
 import javax.swing.BorderFactory;
@@ -17,11 +19,31 @@ import java.awt.event.MouseEvent;
 
 
 public class home extends homepage {
-    public home(){
-        super("HealthAppointment");
-        addGuiComponents();
+    private ButtonGroup appointmentTypeGroup;
+    private String loggedInLastName;
+    private String loggedInFirstName;
+    private String loggedInMiddleName;
+    private int age;
+    private long number;
+    private String address;
+    private String sex;
+    private int id;
+    private String email;
 
+    public home(int id, String loggedInLastName, String loggedInFirstName, String loggedInMiddleName,String sex, int age, long number, String email, String address) {
+        super("HealthAppointment");
+        this.loggedInLastName = loggedInLastName;
+        this.loggedInFirstName = loggedInFirstName;
+        this.loggedInMiddleName = loggedInMiddleName;
+        this.sex = sex;
+        this.age = age;
+        this.number = number;
+        this.address = address;
+        this.email = email;
+        this.id = id;
+        addGuiComponents();
     }
+
 
     private void addGuiComponents() {
         ImageIcon logoIcon = new ImageIcon("appoinment/src/image/434024649_1363976920953749_3166889348485858378_n.png"); // Replace "path_to_your_logo_image_file.jpg" with the actual path to your image file
@@ -54,35 +76,51 @@ public class home extends homepage {
         add(menulabel2);
 
 
-        //new time menu for the time selection mode
+        //new edit chelsie user profile 05-17-24
 
-        JLabel home = new JLabel("Home");
-        home.setFont(new Font("Dialog", Font.BOLD, 18));
+        JButton userProfile= new JButton("User Profile");
+        userProfile.setFont(new Font("Dialog", Font.BOLD, 18));
 
-
-        home.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        home.setForeground(commonconstant.TEXT_COLOR);
-        home.setBounds(630, 91, 100,25);
-
-
-        //reserved space for database
-
-        JLabel Bapp= new JLabel("Book an Appointment");
-        Bapp.setFont(new Font("Dialog", Font.BOLD, 18));
-
-        Bapp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        Bapp.setForeground(commonconstant.TEXT_COLOR);
-        //set mouse listener
-        Bapp.addMouseListener(new MouseAdapter() {
+        userProfile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        userProfile.setForeground(commonconstant.SECONDARY_COLOR);
+        userProfile.setBackground(commonconstant.HOME_BG1_BLUE);
+        userProfile.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
                 home.this.dispose();
+                new UserProfile(id, loggedInLastName, loggedInFirstName, loggedInMiddleName, sex, age, number, address, email).setVisible(true);
+            }
+        });
+//new edit change x loc
+        userProfile.setBounds(635, 90, 140,30);
 
-                new Appoinment().setVisible(true);
+
+
+        //new edit change x loc
+
+        JLabel ContactUs= new JLabel("Contact Us");
+        ContactUs.setFont(new Font("Dialog", Font.BOLD, 18));
+
+        ContactUs.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        ContactUs.setForeground(commonconstant.TEXT_COLOR);
+
+        //set mouse listener
+        ContactUs.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                home.this.dispose();
+                new ContactUs().setVisible(true);
+
             }
         });
 
-        Bapp.setBounds(695, 91, 200,25);
+        ContactUs.setBounds(885, 91, 130,25);
+
+
+
+//new edit change x loc
 
         JLabel about= new JLabel("About Us");
         about.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -90,46 +128,66 @@ public class home extends homepage {
         about.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         about.setForeground(commonconstant.TEXT_COLOR);
         //set mouse listener
+
         about.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 home.this.dispose();
-
                 new About().setVisible(true);
+            }
+
+        });
+
+        about.setBounds(790, 91, 100,25);
+
+        // new edit nothing button
+
+        JButton nothing = new JButton("");
+        nothing.setBounds(0, 0, 0, 0);
+        nothing.setForeground(new Color(0, 0, 0, 0));
+        nothing.setBackground(new Color(0, 0, 0, 0));
+        nothing.setFont(new Font("Dialog", Font.BOLD, 0));
+
+        nothing.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        //set mouse listener
+        nothing.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                home.this.dispose();
+
+                new loginpage().setVisible(true);
+
             }
         });
 
-        about.setBounds(900, 91, 160,25);
 
         JButton signin= new JButton("Logout");
         signin.setFont(new Font("Dialog", Font.BOLD, 18));
-
         signin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         signin.setForeground(commonconstant.SECONDARY_COLOR);
         signin.setBackground(commonconstant.HOME_BG1_BLUE);
-     signin.addMouseListener(new MouseAdapter() {
-         @Override
-         public void mouseClicked(MouseEvent e) {
-             super.mouseClicked(e);
-             home.this.dispose();
-             new loginpage().setVisible(true);
-         }
-     });
+        signin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                userDb.removeBookedTimeSlotsForUser(id);
+                super.mouseClicked(e);
+                home.this.dispose();
+                new loginpage().setVisible(true);
+            }
+        });
 
         signin.setBounds(1000, 81, 150,42);
 
-
+        add(userProfile);
+        add(nothing); // new edit
         add(signin);
         add(about);
-        add(Bapp);
-        add(home);
+        add(ContactUs);
 
 
         JLabel text = new JLabel("Consult your health");
         text.setBounds(16, 80, 600, 400);
         text.setForeground(commonconstant.TEXT_COLOR.brighter());
-
-
         text.setFont(new Font("Dialog", Font.BOLD, 60));
         text.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -186,8 +244,6 @@ public class home extends homepage {
 
 
 
-
-
         add(newlabel7);
         add(newlabel6);
         add(newlabel5);
@@ -200,57 +256,72 @@ public class home extends homepage {
         JPanel appointmentPanel = new JPanel();
         appointmentPanel.setLayout(null); // Set the layout to null to allow positioning components manually
         appointmentPanel.setBounds(670, 165, 520, 170); // Set the bounds of the panel
-        appointmentPanel.setBackground(commonconstant.HOME_BG1_GRAYISH); // Set the background color of the panel
+        appointmentPanel.setBackground(new Color(1, 122, 194, 100));
 
         JLabel Appoinment = new JLabel("APPOINTMENT");
         Appoinment.setBounds(10, 10, 500, 50); // Adjust the bounds and position of the label
-        Appoinment.setForeground(commonconstant.SECONDARY_COLOR);
         Appoinment.setFont(new Font("Dialog", Font.BOLD, 38));
+        Appoinment.setForeground(commonconstant.SECONDARY_COLOR);
 
         JLabel AppoinmentBook = new JLabel("Want an appointment?");
         AppoinmentBook.setBounds(15, 50, 500, 50); // Adjust the bounds and position of the label
         AppoinmentBook.setForeground(commonconstant.SECONDARY_COLOR);
         AppoinmentBook.setFont(new Font("Dialog", Font.BOLD, 20));
 
-        ImageIcon AppointmentHomeImg= new ImageIcon("appoinment/src/image/clockpic home (3).png");
+        ImageIcon appointmentPic= new ImageIcon("appoinment/src/image/FINALAPPOINTMENTBGREMOVED.png");
+        JLabel HomeImgAppointmentlabel = new JLabel (appointmentPic);
+        HomeImgAppointmentlabel.setBounds(285, -85, 300, 350); // Adjust the position and size as needed
 
-        // Create a JLabel to display the logo image
-        JLabel HomeImgAppointmentlabel = new JLabel (AppointmentHomeImg);
-        HomeImgAppointmentlabel.setBounds(927, 160, 300, 200); // Adjust the position and size as needed
 
         JButton book = new JButton("Book Now");
         book.setFont(new Font("Dialog", Font.BOLD, 15));
 
         book.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        book.setBounds(710, 280, 150, 30);
+        book.setBounds(710, 265, 150, 30); //gi-edit ang y ani
         book.setForeground(commonconstant.TEXT_COLOR);
         //set mouse listener
+        // In the home class
         book.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 home.this.dispose();
-
-                new Appoinment().setVisible(true);
+                new DoctorTypeAppointment(id, loggedInLastName, loggedInFirstName, loggedInMiddleName,sex , age, number, email, address).setVisible(true);
             }
         });
 
-        add(HomeImgAppointmentlabel);
-        appointmentPanel.add(AppoinmentBook);
-        appointmentPanel.add(Appoinment); // Add the label to the panel
-        add(book);
-        add(appointmentPanel); // Add the panel to the main container
+        JLabel howToBook = new JLabel("<html><u>Don't know how to book? click here</u></html>");
+        howToBook.setForeground(commonconstant.SECONDARY_COLOR);
+        howToBook.setFont(new Font("Dialogs", Font.BOLD, 12));
+        howToBook.setBounds(30,145,500, 17);
+
+        howToBook.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        howToBook.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                home.this.dispose();
+
+                new HowToAppointment().setVisible(true);
+            }
+        });
+
+        appointmentPanel.add(howToBook);
+
+
+
+
 
         JPanel hoursPanel = new JPanel();
-            hoursPanel.setLayout(null); // Set the layout to null to allow positioning components manually
+        hoursPanel.setLayout(null); // Set the layout to null to allow positioning components manually
         hoursPanel.setBounds(670, 370, 520, 170); // Set the bounds of the panel
-        hoursPanel.setBackground(commonconstant.HOME_BG1_GRAYISH); // Set the background color of the panel
+        hoursPanel.setBackground(new Color(1, 122, 194, 100));
 
         JLabel hours = new JLabel("OPENING HOURS");
-        hours.setForeground(commonconstant.SECONDARY_COLOR);
-        hours.setBackground(commonconstant.BLUE_COLOR);
-        hours.setFont(new Font("Dialog", Font.BOLD, 38));
         hours.setLayout(null);
-        hours.setBounds(680, 380, 500, 50);
+        hours.setFont(new Font("Dialog", Font.BOLD, 38));
+        hours.setForeground(commonconstant.SECONDARY_COLOR);
+        hours.setBounds(10, 10, 500, 50); // Adjust the bounds and position of the label
+
 
 
         JButton time = new JButton("8:00 AM-11:00 AM");
@@ -260,14 +331,14 @@ public class home extends homepage {
         time.setForeground(commonconstant.TEXT_COLOR);
         time.setBounds(675, 438, 159,30);
 
-        time.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                home.this.dispose();
-
-                new Appoinment().setVisible(true);
-            }
-        });
+//        time.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                home.this.dispose();
+//
+//                new Appoinment(loggedInLastName, loggedInFirstName, loggedInMiddleName).setVisible(true);
+//            }
+//        });
 
 
         JLabel to = new JLabel("TO");
@@ -279,95 +350,165 @@ public class home extends homepage {
         time2.setFont(new Font("Dialog", Font.BOLD, 14));
 
         time2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        time2.setBounds(877, 438, 159,30);
         time2.setForeground(commonconstant.TEXT_COLOR);
         time2.setBounds(877, 438, 159,30);
 
-        time2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                home.this.dispose();
+//        time2.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                home.this.dispose();
+//
+//                new Appoinment().setVisible(true);
+//            }
+//        });
 
-                new Appoinment().setVisible(true);
-            }
-        });
-
-        ImageIcon hoursHomeImg= new ImageIcon("appoinment/src/image/clockpic home (3).png");
+        ImageIcon hoursHomeImg= new ImageIcon("appoinment/src/image/FINALHOURSBGREMOVED.png");
         JLabel HomeClockImg = new JLabel(hoursHomeImg);
-        HomeClockImg.setBounds(965, 285, 300, 350);
+        HomeClockImg.setBounds(955, 285, 300, 350);
 
-//        JLabel openingDays = new JLabel("Opens from Monday to Saturday");
-//        openingDays.setFont(new Font("Dialog", Font.BOLD, 18));
-//        openingDays.setBounds(877, 300, 350, 50);
-//        openingDays.setForeground(commonconstant.HOME_BG1_BLUE);
-//        openingDays.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        JLabel openingDays = new JLabel("Opens from Monday to Saturday");
-        openingDays.setFont(new Font("Dialog", Font.BOLD, 14));
 
+        JLabel openingDays = new JLabel("<html><u>Monday to Saturday</u></html>");
+        openingDays.setFont(new Font("Dialog", Font.BOLD, 30));
+        openingDays.setForeground(commonconstant.SECONDARY_COLOR);
+        openingDays.setBounds(25, 110, 500,40);
         openingDays.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        openingDays.setForeground(commonconstant.TEXT_COLOR);
-        openingDays.setBounds(877, 438, 500,30);
 
-        add(hoursPanel);
-        add(openingDays);
-        add(HomeClockImg);
+
+        appointmentPanel.add(Appoinment); // Add the label to the panel
+        appointmentPanel.add(AppoinmentBook);
+        appointmentPanel.add( HomeImgAppointmentlabel);
+        add(book);
+        add(appointmentPanel); // Add the panel to the main container
+
+        hoursPanel.add(openingDays);
+        hoursPanel.add(hours);
         add(time2);
+        add(HomeClockImg);
         add(to);
         add(time);
-        add(hours);
+        add(hoursPanel);
 
 
-        JLabel contact = new JLabel("Emergency Service");
-        contact.setBounds(700, 300, 400, 400);
-        contact.setBackground(commonconstant.BLUE_COLOR);
-        contact.setForeground(commonconstant.TEXT_COLOR);
+        JPanel services = new JPanel(null);
+        services.setBounds(670, 575, 520, 170);
+        services.setBackground(new Color(1, 122, 194, 100));
 
-        contact.setFont(new Font("Dialog", Font.BOLD, 30));
-        contact.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel availableServices = new JLabel("AVAILABLE SERVICES");
+        availableServices.setFont (new Font ("Dialog", Font.BOLD, 38));
+        availableServices.setBounds(10,15, 500, 40);
+        availableServices.setForeground(commonconstant.SECONDARY_COLOR);
 
-        JButton emergency = new JButton("Contact Us");
-        emergency.setFont(new Font("Dialog", Font.BOLD, 10));
+        JLabel generalConsult = new JLabel("    General Consultation");
+        generalConsult.setFont(new Font("Dialogs", Font.BOLD, 18));
+        generalConsult.setForeground(commonconstant.TEXT_COLOR);
+        generalConsult.setBounds(10,55, 300, 30);
 
-        emergency.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        emergency.setForeground(commonconstant.TEXT_COLOR);
-        emergency.setBounds(650, 600, 140,20);
 
-        add(emergency);
-        add(contact);
+        JLabel labDiagnostics = new JLabel("    Laboratory and Diagnostics");
+        labDiagnostics.setFont(new Font("Dialogs", Font.BOLD, 18));
+        labDiagnostics.setForeground(commonconstant.TEXT_COLOR);
+        labDiagnostics.setBounds(10, 80, 300, 30);
+
+        JLabel rehabilitationMeds = new JLabel("    Rehabilitation and Medicine");
+        rehabilitationMeds.setFont(new Font("Dialogs", Font.BOLD, 18));
+        rehabilitationMeds.setForeground(commonconstant.TEXT_COLOR);
+        rehabilitationMeds.setBounds(10,105, 300, 30);
+
+        JLabel onlineConsult = new JLabel("    Online Consultation");
+        onlineConsult.setFont(new Font("Dialogs", Font.BOLD, 18));
+        onlineConsult.setForeground(commonconstant.TEXT_COLOR);
+        onlineConsult.setBounds(10,130, 300, 30);
+
+        ImageIcon servicesImg = new ImageIcon("appoinment/src/image/FINALPICSERVICES.png");
+        JLabel AvailableServicesPic = new JLabel(servicesImg);
+        AvailableServicesPic.setBounds(335,-10,200,200);
+
+        ImageIcon arrowServicesImg1 = new ImageIcon("appoinment/src/image/finalPicArrow.png");
+        JLabel arrowImg1 = new JLabel(arrowServicesImg1);
+        arrowImg1.setBounds(-85,-30,200,200);
+
+    ImageIcon arrowServicesImg2 = new ImageIcon("appoinment/src/image/finalPicArrow.png");
+        JLabel arrowImg2 = new JLabel(arrowServicesImg2);
+        arrowImg2.setBounds(-85,-5,200,200);
+
+    ImageIcon arrowServicesImg3 = new ImageIcon("appoinment/src/image/finalPicArrow.png");
+        JLabel arrowImg3 = new JLabel(arrowServicesImg3);
+        arrowImg3.setBounds(-85,20,200,200);
+
+    ImageIcon arrowServicesImg4 = new ImageIcon("appoinment/src/image/finalPicArrow.png");
+        JLabel arrowImg4 = new JLabel(arrowServicesImg4);
+        arrowImg4.setBounds(-85,45,200,200);
+
+        services.add(arrowImg1);
+        services.add(arrowImg2);
+        services.add(arrowImg3);
+        services.add(arrowImg4);
+
+        services.add(onlineConsult);
+        services.add(availableServices);
+        services.add(generalConsult);
+        services.add(labDiagnostics);
+        services.add(rehabilitationMeds);
+        services.add(AvailableServicesPic);
+        add(services);
+
+
 
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
 
         JLabel panelLabel = new JLabel();
         panel1.add(panelLabel, BorderLayout.CENTER);
-
-        // Set the size and location of the panel
         panel1.setBounds(0, 0, 1300, 150);
 
-        // Add the panel to the main container
-        add(panel1);
+        add(panel1); // white panel above
+
+
 
         JPanel panel2 = new JPanel();
-        panel2.setLayout(new BorderLayout());
-
-        JLabel panelLabel2 = new JLabel();
+        panel2.setBounds(0, 150, 630, 650);
         panel2.add(panelLabel, BorderLayout.CENTER);
         panel2.setBackground(commonconstant.HOME_BG1_GRAY);
-        // Set the size and location of the panel
-        panel2.setBounds(0, 150, 630, 650);
 
-        // Add the panel to the main container
-        add(panel2);
+        ImageIcon BG_Grayish = new ImageIcon ("appoinment/src/image/doctorsIMG.png");
+        JLabel HomeBG_left = new JLabel(BG_Grayish);
+        HomeBG_left.setBounds(0, 0, 900, 650);
 
-        setLayout(null); // Set the layout of the parent container to null
+        panel2.add(HomeBG_left);
+        add(panel2); // grayish bg
+
+
+
+        ImageIcon bgBlue = new ImageIcon ("appoinment/src/image/flat-lay-medical-desk-with-equipment (1).jpg");
+        JLabel bgBlueRight = new JLabel(bgBlue);
+        bgBlueRight.setBounds(0, 0, 650, 650);
 
         JPanel panel3 = new JPanel(new BorderLayout());
         JLabel panelLabel3 = new JLabel();
         panel3.add(panelLabel3, BorderLayout.CENTER);
         panel3.setBackground(commonconstant.HOME_BG1_BLUE);
         panel3.setBounds(600, 150, 650, 650);
-        add(panel3);
+
+        panel3.add(bgBlueRight);
+                add(panel3); //blue bg right
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
+
+
+
 }
+

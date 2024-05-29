@@ -1,6 +1,7 @@
 package gui;
 
 import constant.commonconstant;
+import db.userDb;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class About extends homepage{
+ private int userId;
+ private String loggedInLastName;
+ private String loggedInFirstName;
+ private String loggedInMiddleName;
+ private int age;
+ private int number;
+ private String address;
+ private int id;
+ private String email;
+ private String sex;
+
     public About(){
         super("HealthAppointment");
         addGuiComponents();
@@ -41,21 +53,6 @@ public class About extends homepage{
         add(logoLabel3);
 
 
-
-
-
-
-/*JLabel menulabel = new JLabel("Medical Appointment");
-
-        menulabel.setBounds(90, 37, 400, 100);
-        menulabel.setForeground(commonconstant.DARK_BLUE.brighter());
-        menulabel.setFont(new Font("Dialog", Font.BOLD, 23));
-
-        menulabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        add(menulabel);*/
-
-
         //new time menu for the time selection mode
 
         JButton home = new JButton("Home");
@@ -69,21 +66,22 @@ public class About extends homepage{
             public void mouseClicked(MouseEvent e) {
                 About.this.dispose();
 
-                new home().setVisible(true);
+                new home(id, loggedInLastName, loggedInFirstName, loggedInMiddleName, sex, age, number, email, address).setVisible(true);
             }
         });
-        home.setBounds(760, 130, 150, 25);
+        home.setBounds(620, 130, 150, 25);
         //reserved space for database
         add(home);
 
-     JButton about1 = new JButton("About us");
-     about1.setFont(new Font("Dialog", Font.BOLD, 18));
+
+    JButton about1 = new JButton("About Us");
      about1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+     about1.setFont(new Font("Dialog", Font.BOLD, 18));
      about1.setForeground(commonconstant.TEXT_COLOR);
      about1.setBounds(910, 130, 150, 25);
+
      //reserved space for database
      add(about1);
-
      JButton logout = new JButton("Logout");
      logout.setFont(new Font("Dialog", Font.BOLD, 18));
      logout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -92,6 +90,7 @@ public class About extends homepage{
       @Override
       public void mouseClicked(MouseEvent e) {
        About.this.dispose();
+          userDb.removeBookedTimeSlotsForUser(id);
 
        new loginpage().setVisible(true);
       }
@@ -99,6 +98,46 @@ public class About extends homepage{
      logout.setBounds(1060, 130, 150, 25);
      //reserved space for database
      add(logout);
+
+//new edit chelsie nothing og ang user profile button
+
+       JButton nothing = new JButton("");
+        nothing.setBounds(0, 0, 0, 0);
+        nothing.setForeground(new Color(0, 0, 0, 0));
+        nothing.setBackground(new Color(0, 0, 0, 0));
+        nothing.setFont(new Font("Dialog", Font.BOLD, 0));
+
+        nothing.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        //set mouse listener
+        nothing.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                About.this.dispose();
+
+                new loginpage().setVisible(true);
+
+            }
+        });
+        add(nothing);
+
+        JButton userProfile= new JButton("User Profile");
+        userProfile.setFont(new Font("Dialog", Font.BOLD, 18));
+
+        userProfile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        userProfile.setForeground(commonconstant.TEXT_COLOR);
+
+     userProfile.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+       super.mouseClicked(e);
+       About.this.dispose();
+       new UserProfile(id, loggedInLastName, loggedInFirstName, loggedInMiddleName, sex, age, number, address, email).setVisible(true);
+      }
+     });
+        userProfile.setBounds(770, 130, 140,25);
+
+        add(userProfile);
+//until here og sa ubos katong panel
 
 
 
@@ -195,18 +234,15 @@ public class About extends homepage{
 
 
 
-
-
-
         JPanel panel2 = new JPanel();
-
         panel2.setLayout(new BorderLayout());
-
         JLabel panelLabel1 = new JLabel();
         panel2.add(panelLabel1, BorderLayout.CENTER);
         panel2.setBackground(new Color (255, 255, 255, 120));
         // Set the size and location of the panel
-        panel2.setBounds( 0, 0, 1500, 700);
+        panel2.setBounds( 0, 0, 1500, 780);
+//chelsie gi resize ang white transparent panel
+
 
         // Add the panel to the main container
         add(panel2);

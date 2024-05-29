@@ -1,45 +1,49 @@
 package gui;
 
-import adminpage.AdminPageController;
-import adminpage.ScheduleTable;
-import db.userDb;
+
+
+import doctors.DoctorTypeAppointment;
+import doctors.OPHTHALMOLOGIST;
+
 
 import javax.swing.*;
 
 public class launcher {
+    private static String loggedInLastName;
+    private static String loggedInFirstName;
+    private static String loggedInMiddleName;
+    private static int id;
+    private static int age;
+    private static String sex;
+    private static int number;
+    private static String email;
+    private static String address;
     public static void main(String[] args) {
+
+
         SwingUtilities.invokeLater(new Runnable() {
+
+
             @Override
             public void run() {
+                new OPHTHALMOLOGIST().setVisible(true);
 
-                //new calendar().setVisible(true);
-//new AppointmentScheduler().setVisible(true);
-//               new register().setVisible(true);
-//                new Appoinment().setVisible(true);
-//new Features().setVisible(true);
-          // new home().setVisible(true);
-//                new loginpage().setVisible(true);
-//new menu().setVisible(true);
-            //new typeAppointment().setVisible(true);
-                new ScheduleTable().setVisible(true);
+            //    new DoctorTypeAppointment(id, loggedInLastName, loggedInFirstName, loggedInMiddleName, sex, age, number, email, address).setVisible(true);
 
 
+        //new DoctorTypeAppointment().setVisible(true);
+
+//new AdminHome().setVisible(true);
+//new About().setVisible(true);
+              //new AppointmentList().setVisible(true);
+//           new loginpage().setVisible(true);
+//new typeAppointment().setVisible(true);
+//   new home(id, loggedInLastName, loggedInFirstName, loggedInMiddleName,sex , age, number, email, address).setVisible(true);
+//new HowToAppointment().setVisible(true);
 
 
-               //new loginpage().setVisible(true);
-                //new Appoinment().setVisible(true);
-                //new AdminPageController().setVisible(true);
-//new Features().setVisible(true);
 
-//new home().setVisible(true);
-
-
-           new home().setVisible(true);
-
-               new register().setVisible(true);
-                //new Appoinment().setVisible(true);
-//new Features().setVisible(true);
-            //new home().setVisible(true);
+              //  new ContactUs().setVisible(true);
 
               // System.out.println(MyJDBC.checkuser("username1234"));
                //System.out.println(MyJDBC.register("username1234", "password"));
